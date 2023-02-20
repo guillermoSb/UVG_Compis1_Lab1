@@ -3,8 +3,10 @@ from Automata import Automata
 
 def test_postfix():
     # Arrange 
-		infix = "4+18/(9−3)"
+		infix = "a*|b.c"
 		# Act
-		postfix = Automata._from_regex(infix)
+		postfix = Automata._postfix_from_regex(infix)
 		# Assert
-		assert postfix == "4 18 9 3 − / +"
+		assert postfix == "a*bc.|"
+
+
