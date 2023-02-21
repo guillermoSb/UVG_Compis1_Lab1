@@ -30,7 +30,18 @@ class Automata:
 			# Check that the regex has the same number of opening and closing parentheses
 			if regex.count('(') != regex.count(')'):
 				raise Exception("[REGEX ERROR] The number of opening and closing parentheses is not the same.")
-				
+			
+			# Check that there are no two operators in a row
+			for i in range(0, len(regex)):
+
+				if regex[i] in cls.operators.keys() and i < len(regex) - 1:
+					if regex[i+1] in cls.operators.keys():
+						raise Exception("[REGEX ERROR] There are two operators in a row.")			
+			
+			# The last character of the regex cannot be an operator
+			if regex[-1] in ['|']:
+				raise Exception("[REGEX ERROR] The last character of the regex cannot be the | operator.")
+			
 
 		@classmethod
 		def _states_from_postfix(cls, postfix):
