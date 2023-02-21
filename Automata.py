@@ -41,10 +41,10 @@ class Automata:
 						start_state = state_counter
 						end_state = state_counter + 1
 						
-						new_states[start_state] = {'E': (operand._initial, end_state)}
+						new_states[start_state] = {'ε': (operand._initial, end_state)}
 						new_states[end_state] = {}
-						if 'E' in operand._states[operand._final].keys():
-							prev_transitions = operand._states[operand._final]['E']
+						if 'ε' in operand._states[operand._final].keys():
+							prev_transitions = operand._states[operand._final]['ε']
 						else:
 							prev_transitions = tuple()
 						
@@ -52,7 +52,7 @@ class Automata:
 						
 						new_states[operand._final] = {
 							**new_states[operand._final],
-							**{'E': new_transitions}
+							**{'ε': new_transitions}
 						}
 						state_counter += 2
 
@@ -65,10 +65,10 @@ class Automata:
 						start_state = state_counter
 						end_state = state_counter + 1
 						
-						new_states[start_state] = {'E': (operand._initial)}
+						new_states[start_state] = {'ε': (operand._initial)}
 						new_states[end_state] = {}
-						if 'E' in operand._states[operand._final].keys():
-							prev_transitions = operand._states[operand._final]['E']
+						if 'ε' in operand._states[operand._final].keys():
+							prev_transitions = operand._states[operand._final]['ε']
 						else:
 							prev_transitions = tuple()
 						
@@ -76,7 +76,7 @@ class Automata:
 						
 						new_states[operand._final] = {
 							**new_states[operand._final],
-							**{'E': new_transitions}
+							**{'ε': new_transitions}
 						}
 						state_counter += 2
 
@@ -89,7 +89,7 @@ class Automata:
 									**operand_2._states,
 						}
 						# End state of operand 1 connects to start state of operand 2
-						new_states[operand_1._final] = {'E': (operand_2._initial,)}
+						new_states[operand_1._final] = {'ε': (operand_2._initial,)}
 
 						operation_stack.append(Automata(new_states, operand_1._initial, operand_2._final))
 					elif token == "|":
@@ -101,26 +101,26 @@ class Automata:
 						}
 						start_state = state_counter
 						end_state = state_counter + 1
-						new_states[start_state] = {'E': (operand_1._initial, operand_2._initial)}
+						new_states[start_state] = {'ε': (operand_1._initial, operand_2._initial)}
 						new_states[end_state] = {}
 
-						if 'E' in operand_1._states[operand_1._final].keys():
-							prev_transitions_1 = operand_1._states[operand_1._final]['E']
+						if 'ε' in operand_1._states[operand_1._final].keys():
+							prev_transitions_1 = operand_1._states[operand_1._final]['ε']
 						else:
 							prev_transitions_1 = tuple()
 
-						if 'E' in operand_2._states[operand_2._final].keys():
-							prev_transitions_2 = operand_2._states[operand_2._final]['E']
+						if 'ε' in operand_2._states[operand_2._final].keys():
+							prev_transitions_2 = operand_2._states[operand_2._final]['ε']
 						else:
 							prev_transitions_2 = tuple()
 
 						new_states[operand_1._final] = {
 							**new_states[operand_1._final],
-							**{'E': (end_state,) + prev_transitions_1}
+							**{'ε': (end_state,) + prev_transitions_1}
 						}
 						new_states[operand_2._final] = {
 							**new_states[operand_2._final],
-							**{'E': (end_state,) + prev_transitions_2}
+							**{'ε': (end_state,) + prev_transitions_2}
 						}
 						state_counter += 2
 						operation_stack.append(Automata(new_states, start_state, end_state))

@@ -8,7 +8,7 @@ def test_thompson_concat():
 		# Assert
 		print(states)
 		assert states[0] == {'a': (1,)}
-		assert states[1] == {'E': (2,)}
+		assert states[1] == {'ε': (2,)}
 		assert states[2] == {'b': (3,)}
 		assert states[3] == {}
 		assert len(states.keys()) == 4
