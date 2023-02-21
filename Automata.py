@@ -57,6 +57,30 @@ class Automata:
 						state_counter += 2
 
 						operation_stack.append(Automata(new_states, start_state, end_state))
+					elif token == "+":
+						operand = operation_stack.pop()
+						new_states = {
+									**operand._states, # Append the previous states
+						}
+						start_state = state_counter
+						end_state = state_counter + 1
+						
+						new_states[start_state] = {'E': (operand._initial)}
+						new_states[end_state] = {}
+						if 'E' in operand._states[operand._final].keys():
+							prev_transitions = operand._states[operand._final]['E']
+						else:
+							prev_transitions = tuple()
+						
+						new_transitions = prev_transitions + (operand._initial, end_state)
+						
+						new_states[operand._final] = {
+							**new_states[operand._final],
+							**{'E': new_transitions}
+						}
+						state_counter += 2
+
+						operation_stack.append(Automata(new_states, start_state, end_state))
 					elif token == ".":
 						operand_2 = operation_stack.pop()
 						operand_1 = operation_stack.pop()
