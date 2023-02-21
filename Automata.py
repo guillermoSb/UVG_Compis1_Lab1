@@ -35,13 +35,21 @@ class Automata:
 			for i in range(0, len(regex)):
 
 				if regex[i] in cls.operators.keys() and i < len(regex) - 1:
-					if regex[i+1] in cls.operators.keys():
+					if regex[i+1] in ['*', '?', '+']:
 						raise Exception("[REGEX ERROR] There are two operators in a row.")			
 			
-			# The last character of the regex cannot be an operator
+			# The last character of the regex cannot be an | operator
 			if regex[-1] in ['|']:
 				raise Exception("[REGEX ERROR] The last character of the regex cannot be the | operator.")
 			
+			# The first character of the regex cannot be an | operator
+			if regex[0] in cls.operators:
+				raise Exception("[REGEX ERROR] The first character of the regex cannot be an operator.")
+
+			# The first character of the regex cannot be an uniary operator
+			if regex[0] in ['*', '?', '+']:
+				raise Exception("[REGEX ERROR] The first character of the regex cannot be an uniary operator.")
+				
 
 		@classmethod
 		def _states_from_postfix(cls, postfix):

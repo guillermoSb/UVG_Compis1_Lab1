@@ -3,5 +3,5 @@ import networkx as nx
 import matplotlib.pyplot as plt
 
 
-a = Automata._from_regex('a+bc')
+a = Automata._from_regex('bc+')
 print(a._states)
