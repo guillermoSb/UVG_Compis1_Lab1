@@ -11,12 +11,14 @@ class Automata:
 		}
 
 		
-		
-		def __init__(self, regex):
+		@classmethod
+		def _from_regex(self, regex):
 				self._regex = regex
 				self._postfix = self._postfix_from_regex(regex)
-				self._states = self._states_from_postfix(self._postfix)
+				return self._states_from_postfix(self._postfix)
 
+
+		
 		def __init__(self, states, initial, final):
 				self._states = states
 				self._initial = initial
@@ -121,18 +123,23 @@ class Automata:
 				# Implementation of the Shunting Yard Algorithm (https://brilliant.org/wiki/shunting-yard-algorithm/
 				for token in regex_list:
 					is_operator = token in cls.operators.keys()
-					if not is_operator:
+					if not is_operator and token not in ['(', ')']:
 						token_stack.append(token)
 					elif token in ['(', ')']:
 						if token == '(':
 							operator_stack.append(token)
 						else:
-							while len(operator_stack) > 0 and cls.operators[operator_stack[-1]] != '(':
+							while len(operator_stack) > 0 and operator_stack[-1] != '(':
 								token_stack.append(operator_stack.pop())
 							operator_stack.pop()	
 					else:
 						precedence = cls.operators[token]
-						while len(operator_stack) > 0 and cls.operators[operator_stack[-1]] < precedence and cls.operators[operator_stack[-1]] != '(':
+				
+						while len(operator_stack) > 0:
+							if operator_stack[-1] == "(":
+								break
+							if not cls.operators[operator_stack[-1]] < precedence:
+								break
 							token_stack.append(operator_stack.pop()) 
 						operator_stack.append(token)
 				while len(operator_stack) > 0:

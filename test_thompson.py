@@ -18,10 +18,8 @@ def test_thompson_union():
 		postfix = "ab|"
 		# Act
 		states = Automata._states_from_postfix(postfix)._states
-		# Assert
-		print(states)
-		
-		assert len(states.keys()) == 4
+		# Assert	
+		assert len(states.keys()) == 6
 
 def test_thompson_closure():
     # Arrange 
