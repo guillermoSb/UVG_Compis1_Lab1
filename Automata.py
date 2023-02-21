@@ -52,12 +52,24 @@ class Automata:
 						state_counter += 2
 
 						operation_stack.append(Automata(new_states, start_state, end_state))
+					elif token == ".":
+						operand_2 = operation_stack.pop()
+						operand_1 = operation_stack.pop()
+						new_states = {
+									**operand_1._states,
+									**operand_2._states,
+						}
+						# End state of operand 1 connects to start state of operand 2
+						new_states[operand_1._final] = {'E': (operand_2._initial,)}
+
+						operation_stack.append(Automata(new_states, operand_1._initial, operand_2._final))
+						
 				else:
 					# Append a base Automata to the operation stack
 					operation_stack.append(Automata({state_counter: {token: (state_counter + 1,)}, state_counter + 1: {}}, state_counter, state_counter + 1))
 					state_counter += 2
-			print(operation_stack[0]._states)
-			return {}
+			
+			return operation_stack[0]
 
 
 		@classmethod
