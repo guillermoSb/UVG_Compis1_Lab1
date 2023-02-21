@@ -14,6 +14,7 @@ class Automata:
 		@classmethod
 		def _from_regex(self, regex):
 				self._regex = regex
+				self._check_regex(regex)
 				self._postfix = self._postfix_from_regex(regex)
 				return self._states_from_postfix(self._postfix)
 
@@ -24,6 +25,12 @@ class Automata:
 				self._initial = initial
 				self._final = final
 		
+		@classmethod
+		def _check_regex(cls, regex):
+			# Check that the regex has the same number of opening and closing parentheses
+			if regex.count('(') != regex.count(')'):
+				raise Exception("[REGEX ERROR] The number of opening and closing parentheses is not the same.")
+				
 
 		@classmethod
 		def _states_from_postfix(cls, postfix):
