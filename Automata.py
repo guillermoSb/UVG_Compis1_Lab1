@@ -114,10 +114,9 @@ class Automata:
 				
 				# Add the . to the regex
 				for i in range(0, len(regex)):
-					if regex[i] not in cls.operators.keys() and regex[i] != '(' and i < len(regex) - 1:
-						if regex[i + 1] not in cls.operators.keys() and regex[i + 1] != ')':
+					if regex[i] not in ['|', '(', '.'] and i < len(regex) - 1:
+						if regex[i + 1] not in cls.operators and regex[i + 1] != ')':
 							regex = regex[:i + 1] + '.' + regex[i + 1:]
-				
 				# Stack for tokens
 				token_stack = []
 				# Stack for operators
