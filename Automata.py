@@ -117,6 +117,7 @@ class Automata:
 					if regex[i] not in ['|', '(', '.'] and i < len(regex) - 1:
 						if regex[i + 1] not in cls.operators and regex[i + 1] != ')':
 							regex = regex[:i + 1] + '.' + regex[i + 1:]
+				
 				# Stack for tokens
 				token_stack = []
 				# Stack for operators
