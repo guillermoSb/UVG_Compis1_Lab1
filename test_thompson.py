@@ -13,6 +13,16 @@ def test_thompson_concat():
 		assert states[3] == {}
 		assert len(states.keys()) == 4
 
+def test_thompson_union():
+	 # Arrange 
+		postfix = "ab|"
+		# Act
+		states = Automata._states_from_postfix(postfix)._states
+		# Assert
+		print(states)
+		
+		assert len(states.keys()) == 4
+
 def test_thompson_closure():
     # Arrange 
 		postfix = "a*"
