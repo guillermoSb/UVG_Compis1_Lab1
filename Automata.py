@@ -6,6 +6,7 @@ class Automata:
 		operators = {
 			'*': 1,
 			'+': 1,
+			'?': 1,
 			'.': 2,
 			'|': 3
 		}
@@ -29,7 +30,7 @@ class Automata:
 		def _check_regex(cls, regex):
 			# Check that the regex has the same number of opening and closing parentheses
 			if regex.count('(') != regex.count(')'):
-				raise Exception("[REGEX ERROR] The number of opening and closing parentheses is not the same.")
+				raise Exception("[REGEX ERROR] The regex has a different number of opening and closing parentheses.")
 			
 			# Check that there are no two operators in a row
 			for i in range(0, len(regex)):
@@ -53,6 +54,7 @@ class Automata:
 
 		@classmethod
 		def _states_from_postfix(cls, postfix):
+			
 			state_counter = 0
 			postfix_stack = list(postfix)
 			operation_stack = []
@@ -91,7 +93,7 @@ class Automata:
 						start_state = state_counter
 						end_state = state_counter + 1
 						
-						new_states[start_state] = {'ε': (operand._initial)}
+						new_states[start_state] = {'ε': (operand._initial,)}
 						new_states[end_state] = {}
 						if 'ε' in operand._states[operand._final].keys():
 							prev_transitions = operand._states[operand._final]['ε']
@@ -118,6 +120,28 @@ class Automata:
 						new_states[operand_1._final] = {'ε': (operand_2._initial,)}
 
 						operation_stack.append(Automata(new_states, operand_1._initial, operand_2._final))
+					elif token == "?":
+						operand_1 = operation_stack.pop()
+
+						new_states = {
+									**operand_1._states,
+						}
+						start_state = state_counter
+						end_state = state_counter + 1
+						new_states[start_state] = {'ε': (operand_1._initial, end_state)}
+						new_states[end_state] = {}
+
+						if 'ε' in operand_1._states[operand_1._final].keys():
+							prev_transitions_1 = operand_1._states[operand_1._final]['ε']
+						else:
+							prev_transitions_1 = tuple()
+
+						new_states[operand_1._final] = {
+							**new_states[operand_1._final],
+							**{'ε': (end_state,) + prev_transitions_1}
+						}
+						state_counter += 2
+						operation_stack.append(Automata(new_states, start_state, end_state))	
 					elif token == "|":
 						operand_2 = operation_stack.pop()
 						operand_1 = operation_stack.pop()
@@ -149,8 +173,7 @@ class Automata:
 							**{'ε': (end_state,) + prev_transitions_2}
 						}
 						state_counter += 2
-						operation_stack.append(Automata(new_states, start_state, end_state))
-						
+						operation_stack.append(Automata(new_states, start_state, end_state))	
 				else:
 					# Append a base Automata to the operation stack
 					operation_stack.append(Automata({state_counter: {token: (state_counter + 1,)}, state_counter + 1: {}}, state_counter, state_counter + 1))
@@ -163,10 +186,14 @@ class Automata:
 		def _postfix_from_regex(cls, regex):
 				
 				# Add the . to the regex
-				for i in range(0, len(regex)):
+				i = 0
+				while i < len(regex):
 					if regex[i] not in ['|', '(', '.'] and i < len(regex) - 1:
 						if regex[i + 1] not in cls.operators and regex[i + 1] != ')':
 							regex = regex[:i + 1] + '.' + regex[i + 1:]
+					i += 1
+					
+				
 				
 				# Stack for tokens
 				token_stack = []
@@ -202,4 +229,3 @@ class Automata:
 					token_stack.append(operator_stack.pop())	
 				return ''.join(token_stack)	# The output is a string in postfix notation
 				
-
