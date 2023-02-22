@@ -2,7 +2,7 @@ from Automata import Automata
 from graphviz import Digraph
 
 
-a = Automata._from_regex('a?b*')
+a = Automata._from_regex('(a|b)*aab')
 
 # create a new directed graph
 dot = Digraph()
