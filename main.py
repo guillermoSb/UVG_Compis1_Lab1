@@ -2,10 +2,10 @@ from Automata import Automata
 from graphviz import Digraph
 
 
-a = Automata._from_regex('(a|b)*aab')
+a = Automata._from_regex('a')
 
 # create a new directed graph
-dot = Digraph()
+dot = Digraph(graph_attr={'rankdir': 'LR'})
 
 print(a._states)
 
